@@ -1,0 +1,11 @@
+{
+  "name": "chatapp",
+  "version": "1.0.0",
+  "description": "bizim chat programimiz",
+  "main": "index.js",
+  "scripts": {
+    "test": "no test"
+  },
+  "author": "",
+  "license": "ISC"
+}

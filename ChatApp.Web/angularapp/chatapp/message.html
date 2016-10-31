@@ -1,0 +1,20 @@
+<div class="message__wrapper">
+    <div class="message__header-wrapper">
+        <img class="message__owner-avatar" ng-src="{{ownerAvatar}}" />
+    </div>
+    <div class="message-body">
+        <h4 class="message__owner-nick">{{ownerNick}} - {{timeStamp | date:"medium"}}:</h4>
+        <div class="message__reply-wrapper" ng-if="replyTo">
+            <p class="message__reply-body">"{{replyTo}}"</p>
+        </div>
+        <div class="message__img-wrapper" ng-if="image">
+            <a href="{{image}}" target="_blank">
+                <img class="message__img-body" ng-src="{{image}}" />
+            </a>
+        </div>
+        <div class="message__text-wrapper" ng-if="text">
+            <p class="message__text">{{text}}</p>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>

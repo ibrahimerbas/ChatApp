@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <title>Gel amk korkma!</title>
+</head>
+<body>
+<div class="login__wrapper container">
+    <div class="row login__wrapper--centered">
+        <div class="login__window col-md-4 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form id="loginForm" action="/signup" method="post">
+                        <div class="form-group">
+                            <label for="inputEmail">Email adresin</label>
+                            <input type="email" class="form-control" id="inputEmail" required="required" placeholder="Sifreni unutursan lazim olabilir.">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputUsername">Kullanici adin</label>
+                            <input type="text" class="form-control" id="inputUsername" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword">Sifren</label>
+                            <input type="password" class="form-control" id="inputPassword">
+                        </div>
+                        <div class="form-group">
+                            <label for="avatarInputFile">Avatar</label>
+                            <input type="file" id="avatarInputFile" required="required">
+                            <p class="help-block">Avatarini da buradan ekle</p>
+                        </div>
+                        <button type="submit" id="loginButton" class="btn btn-default" required="required">Vurdurmak istiyorum!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
