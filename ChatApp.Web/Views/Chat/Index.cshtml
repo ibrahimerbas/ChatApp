@@ -1,12 +1,32 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Chat Room";
 }
-@section scripts{ 
-
+@section scripts{
 @Scripts.Render("~/bundles/signalr")
 @Scripts.Render("~/bundles/main")
 <script src="/signalr/hubs"></script>
 }
-<h2>Index</h2>
 
+<div ng-app="chatApp" class="chatroom__wrapper container-fluid">
+    <div class="chatroom__user-list col-md-3 col-xs-12" ng-controller="UserListController">
+        <h3 class="user__list-header">Aktif Piçler</h3>
+        <chat-user ng-repeat="user in users" nick="user.nick" avatar="user.avatar" ng-click="userClick(user)"></chat-user>
+    </div>
+    <div class="chatroom__message-list  col-md-9 col-xs-12">
+        <div class="chatroom__message-wrapper" ng-controller="MessageListController">
+            <chat-message ng-repeat="message in messages" text="message.text" image="message.image" ownernick="message.owner.nick" owneravatar="message.owner.avatar" replyto="message.replyTo" date="message.timeStamp" ng-click="messageClick(message)"></chat-message>
+        </div>
+        <div class="chatroom__message-entry" ng-controller="EntryController">
+            <div class="entry__reply-to" ng-if="currentMessage.replyTo">"{{currentMessage.replyTo}}"<button ng-click="cleanReply()" type="button" class="close"><span>&times;</span></button></div>
+            <div class="entry__message-wrapper">
+                <form class="form-inline entry__send-form" id="entryForm" ng-submit="sendEntry()">
+                    <div class="form-group entry__text-wrapper">
+                        <textarea class="entry__text" ng-model="currentMessage.text"></textarea>
+                    </div>
+                    <button type="submit" id="entryButton" class="btn btn-default" required="required">Ver ellerine!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

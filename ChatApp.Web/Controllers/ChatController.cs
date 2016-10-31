@@ -13,5 +13,14 @@ namespace ChatApp.Web.Controllers
         {
             return View();
         }
+        public ActionResult UserTemplate()
+        {
+            return View();
+        }
+        public ActionResult MessageTemplate()
+        {
+            return View();
+        }
+
     }
 }
