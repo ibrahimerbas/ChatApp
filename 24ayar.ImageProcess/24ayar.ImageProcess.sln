@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "24ayar.ImageProcess", "24ayar.ImageProcess.csproj", "{493CBC97-74EF-479E-BB30-004032B19670}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{493CBC97-74EF-479E-BB30-004032B19670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{493CBC97-74EF-479E-BB30-004032B19670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{493CBC97-74EF-479E-BB30-004032B19670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{493CBC97-74EF-479E-BB30-004032B19670}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
