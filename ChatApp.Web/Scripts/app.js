@@ -10,90 +10,45 @@ var DataService = ["$rootScope", "$q", function ($rootScope, $q) {
     var ChatHubProxy = connection.createHubProxy('ChatHub');
     var connected = false;
 
-    /*Messages*/
     ChatHubProxy.on('InitChatRoom', function (messages, otherOnlineUsers) {
         $rootScope.$broadcast("InitMessages", messages);
         $rootScope.$broadcast("InitUsers", otherOnlineUsers);
     });
 
+    /*Messages*/
     ChatHubProxy.on('IncomingMessage', function (messageModel) {
         $rootScope.$broadcast("IncomingMessage", messageModel);
     });
 
-    connection.start().done(function () {
-        connected = true;
-        ChatHubProxy.invoke("SendMessage", { "Message": "Test message" , "UserId":123});
-    });
+    messageSeen = function (messageID) {
+        ChatHubProxy.invoke('MessageReaded', messageID);
+    }
+
+    loadMessagesByScroll = function (messageID) {
+        if (connected) {
+            return ChatHubProxy.invoke("ScrollMoveMessages", messageID, true);
+        }
+    }
 
     /*Users*/
     ChatHubProxy.on('UserJoined', function (user) {
         $rootScope.$broadcast("UserJoined", user);
     });
 
-    /*
-    var getUserList = function(){
-        isConnected();
-        var deferredMessageList = $q.defer();
-
-
-
-        return [
-            {nick:"Ejder", avatar:"http://sap-certification.info/img/default-avatar.jpg", id:"001"},
-            {nick:"Ejder", avatar:"http://sap-certification.info/img/default-avatar.jpg", id:"002"},
-            {nick:"Ejder", avatar:"http://sap-certification.info/img/default-avatar.jpg", id:"003"},
-            {nick:"Ejder", avatar:"http://sap-certification.info/img/default-avatar.jpg", id:"004"}
-        ];
-        return deferredMessageList.promise;
-    };
-    var getMessageList = function(){
-        return [
-            {
-                id:"0001",
-                text:"Text message text message text message text message",
-                timeStamp: new Date().getTime(),
-                replyTo: "Ejder: Reply edilen message",
-                image: "http://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/sample1_l.jpg",
-                owner:{
-                    id:"0001",
-                    nick:"Ejder",
-                    avatar:"http://sap-certification.info/img/default-avatar.jpg"
-                }
-            }
-        ];
-    };
-
-    bu callbacklerin de signair gonderince cagirilmasi lazim
-    var userAdded = function(user){
-        $rootScope.$broadcast("userAdded", user);
-    };
-    var userUpdated = function(user){
-        $rootScope.$broadcast("userUpdated", user);
-    };
-    var userRemoved = function(userId){
-        $rootScope.$broadcast("userRemoved", userId);
-    };
-    var messageAdded = function(message){
-        $rootScope.$broadcast("messageAdded", message);
-    };
-    var messageUpdated = function(message){
-        $rootScope.$broadcast("messageUpdated", message);
-    };
-    var messageRemoved = function(messageId){
-        $rootScope.$broadcast("messageRemoved", messageId);
-    };
+    connection.start().done(function () {
+        connected = true;
+    });
 
     return {
-        getUserList: getUserList,
-        getMessageList: getMessageList
+        messageSeen: messageSeen,
+        loadMessagesByScroll: loadMessagesByScroll
     };
-    */
 }];
 
 var UserListController = ["$rootScope", "$scope", "DataService", function($rootScope, $scope, DataService){
     $scope.users = [];
 
     $scope.$on("InitUsers", function (event, users) {
-        console.log(users);
         $scope.$apply(function () {
             $scope.users = users;
         });
@@ -105,11 +60,8 @@ var UserListController = ["$rootScope", "$scope", "DataService", function($rootS
 
 
     $scope.$on("UserJoined", function (event, user) {
-       console.log(user);
-       
-       $scope.$apply(function () {
-           $scope.users.push(user);
-       });
+        $scope.users.push(user);
+        $scope.$apply();
     });
 
     $scope.$on("UserLeft", function (event, leftUser) {
@@ -121,21 +73,10 @@ var UserListController = ["$rootScope", "$scope", "DataService", function($rootS
         });
     });
 
-    /*
-    $scope.$on("userUpdated", function(event, user){
-        for(var i=0; i<$scope.users.length; i++){
-            if($scope.users[i].id == user.id){
-                $scope.users[i] = user;
-                break;
-            }
-        }
-    });
-    */
 }];
 var UserDirective = function(){
     return {
         templateUrl:"/Chat/UserTemplate",
-        controller: UserListController,
         restrict: "E",
         transclude: false,
         scope: {
@@ -144,48 +85,56 @@ var UserDirective = function(){
         }
     };
 };
-var MessageListController = ["$rootScope", "$scope", function($rootScope, $scope){
+var MessageListController = ["$rootScope", "$scope", "DataService", "$timeout", function ($rootScope, $scope, DataService, $timeout) {
 
     $scope.messages = [];
 
+    /*
+    $scope.$watch(function () {
+        return messageListEl.scrollTop;
+    },
+    function (oldVal, newVal) {
+        if (newVal == 0) {
+            DataService.loadMessagesByScroll()
+            .done(function (result) {
+                if (result) {
+                    $scope.messages.unshift(result);
+                }
+            });
+        }
+    });
+    */
+
+    scrollToBottom = function () {
+        $timeout(function () {
+            messageListEl = document.querySelector("#chatroom__message-list--scrollable");
+            messageListEl.scrollTop = messageListEl.scrollHeight;
+        });
+    }
+
     $scope.$on("InitMessages", function (event, messages) {
-        console.log(messages);
-        $scope.messages = messages;
+        $scope.$apply(function () {
+            $scope.messages = messages;
+            scrollToBottom();
+        });
     });
 
-    $scope.$on("IncomingMessage", function (message) {
-        console.log(message);
-        $scope.messages.push(message);
+    $scope.$on("IncomingMessage", function (event, message) {
+        $scope.$apply(function () {
+            $scope.messages.push(message);
+            scrollToBottom();
+        });
     });
 
     $scope.messageClick = function(message){
         $rootScope.$broadcast("messageClicked", message);
     }
 
-    /*
-    $scope.$on("messageAdded", function(event, message){
-        $scope.messages.push(message);
-    });
-    $scope.$on("messageUpdated", function(event, message){
-        for(var i=0; i<$scope.messages.length; i++){
-            if($scope.messages[i].id == message.id){
-                $scope.messages[i] = message;
-                break;
-            }
-        }
-    });
-    $scope.$on("messageRemoved", function(event, messageId){
-        $scope.messages = _.remove($scope.messages, function(message){
-            return (message.id == messageId);
-        });
-    });
-    */
 }];
 
 var MessageDirective = function(){
     return {
         templateUrl:"/Chat/MessageTemplate",
-        controller:MessageListController,
         retrict:"E",
         transclude:false,
         scope:{
@@ -204,12 +153,7 @@ var EntryFactory = function(){
         text:null,
         timeStamp: new Date().getTime(),
         replyTo: null,
-        image: null,
-        owner:{
-            id:null,
-            nick:null,
-            avatar:null
-        }
+        image: null
     };
 }
 
@@ -230,7 +174,8 @@ var EntryController = ["$scope", function($scope){
 
     $scope.$on("messageClicked", function(event, message){
         var entry = getInstance();
-        entry.replyTo = message.owner.nick + ": " + message.text;
+        console.log(message);
+        //entry.replyTo = message.owner.nick + ": " + message.text;
     });
 
     $scope.$on("userClicked", function(event, user){
