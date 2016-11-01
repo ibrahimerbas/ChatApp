@@ -26,7 +26,7 @@ namespace ChatApp.Web.Models
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             userIdentity.AddClaim(new Claim("NickName", this.NickName));
-            userIdentity.AddClaim(new Claim("Avatar", this.Avatar));
+            userIdentity.AddClaim(new Claim("Avatar", string.IsNullOrEmpty(this.Avatar) ? "" : this.Avatar ));
             userIdentity.AddClaim(new Claim("LastReadedMessage", this.LastReadedMessage.HasValue ? this.LastReadedMessage.ToString() : ""));
             
             return userIdentity;
