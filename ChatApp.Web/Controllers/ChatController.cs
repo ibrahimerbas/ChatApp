@@ -20,6 +20,7 @@ namespace ChatApp.Web.Controllers
         public ActionResult MessageTemplate()
         {
             return View();
+
         }
 
     }
