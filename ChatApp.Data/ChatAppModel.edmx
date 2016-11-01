@@ -24,6 +24,7 @@
           <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Avatar" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="ChatMessages">
           <Key>
@@ -135,6 +136,7 @@
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ChatMessages" Relationship="ChatAppModel.FK_ChatMessages_AspNetUsers" FromRole="AspNetUser" ToRole="ChatMessage" />
           <NavigationProperty Name="ChatMessages1" Relationship="ChatAppModel.ReadedUsers" FromRole="AspNetUser" ToRole="ChatMessage" />
+          <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ChatMessage">
           <Key>
@@ -175,6 +177,7 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="ChatAppModel.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
                 <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />

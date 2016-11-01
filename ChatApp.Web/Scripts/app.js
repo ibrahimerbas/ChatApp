@@ -10,8 +10,10 @@ var DataService = ["$rootScope", "$q", function ($rootScope, $q) {
     var ChatHubProxy = connection.createHubProxy('ChatHub');
     var connected = false;
 
-    ChatHubProxy.on('InitMessages', function (messages) {
+    /*Messages*/
+    ChatHubProxy.on('InitChatRoom', function (messages, otherOnlineUsers) {
         $rootScope.$broadcast("InitMessages", messages);
+        $rootScope.$broadcast("InitUsers", otherOnlineUsers);
     });
 
     ChatHubProxy.on('IncomingMessage', function (messageModel) {
@@ -20,7 +22,12 @@ var DataService = ["$rootScope", "$q", function ($rootScope, $q) {
 
     connection.start().done(function () {
         connected = true;
-        ChatHubProxy.invoke("SendMessage", { "Message": "Test message" });
+        ChatHubProxy.invoke("SendMessage", { "Message": "Test message" , "UserId":123});
+    });
+
+    /*Users*/
+    ChatHubProxy.on('UserJoined', function (user) {
+        $rootScope.$broadcast("UserJoined", user);
     });
 
     /*
@@ -85,12 +92,36 @@ var DataService = ["$rootScope", "$q", function ($rootScope, $q) {
 var UserListController = ["$rootScope", "$scope", "DataService", function($rootScope, $scope, DataService){
     $scope.users = [];
 
+    $scope.$on("InitUsers", function (event, users) {
+        console.log(users);
+        $scope.$apply(function () {
+            $scope.users = users;
+        });
+    });
+
     $scope.userClick = function(user){
         $rootScope.$broadcast("userClicked", user);
     };
-    $scope.$on("userAdded", function(event, user){
-       $scope.users.push(user);
+
+
+    $scope.$on("UserJoined", function (event, user) {
+       console.log(user);
+       
+       $scope.$apply(function () {
+           $scope.users.push(user);
+       });
     });
+
+    $scope.$on("UserLeft", function (event, leftUser) {
+        remainingUsers = _.remove($scope.users, function (user) {
+            return (user.UserID == leftUser.UserID);
+        });
+        $scope.$apply(function () {
+            $scope.users = remainingUsers;
+        });
+    });
+
+    /*
     $scope.$on("userUpdated", function(event, user){
         for(var i=0; i<$scope.users.length; i++){
             if($scope.users[i].id == user.id){
@@ -99,11 +130,7 @@ var UserListController = ["$rootScope", "$scope", "DataService", function($rootS
             }
         }
     });
-    $scope.$on("userRemoved", function(event, userId){
-        $scope.users = _.remove($scope.users, function(user){
-            return (user.id == userId);
-        });
-    });
+    */
 }];
 var UserDirective = function(){
     return {
@@ -208,11 +235,10 @@ var EntryController = ["$scope", function($scope){
 
     $scope.$on("userClicked", function(event, user){
         var entry = getInstance();
-        if(entry.text){
-            entry.text += " @"+user.nick+" ";
-        }else{
-            entry.text = "@"+user.nick+" ";
+        if (entry.text) {
+            entry.text += " ";
         }
+        entry.text = "@" + user.Name + " ";
     });
 
 }];

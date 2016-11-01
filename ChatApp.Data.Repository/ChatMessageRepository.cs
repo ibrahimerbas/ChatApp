@@ -33,7 +33,7 @@ namespace ChatApp.Data.Repository
                         Message = c.Message,
                         ReplyToMessageID = c.ReplyToMessageID,
                         UserID = c.UserID,
-                        ReadedUsers = c.AspNetUsers.Select(u => new UserSurrogate { ID = u.Id, NickName = u.NickName }).ToList(),
+                        ReadedUsers = c.AspNetUsers.Select(u => new UserSurrogate { ID = u.Id, NickName = u.NickName, Avatar = u.Avatar }).ToList(),
                         ReceivedDate = c.ReceivedDate
                     });
         }
