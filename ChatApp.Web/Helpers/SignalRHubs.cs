@@ -123,7 +123,7 @@ namespace ChatApp.Web.Helpers
             }
             catch(Exception e)
             {
-                throw (e);
+                
                 return null;
             }
         }

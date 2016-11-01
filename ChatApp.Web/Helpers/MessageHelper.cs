@@ -33,7 +33,7 @@ namespace ChatApp.Web.Helpers
         {
             ChatMessageRepository cRepo = new ChatMessageRepository();
             int totalCount = 0;
-            var lastMessmage = cRepo.GetAll(null, 30, 0, out totalCount, "date desc").LastOrDefault();
+            var lastMessmage = cRepo.GetAll(null, 1, 0, out totalCount, "date desc").FirstOrDefault();
             if (lastMessmage != null)
                 return lastMessmage.ID;
             else return null;
