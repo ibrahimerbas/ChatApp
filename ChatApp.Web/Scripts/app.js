@@ -45,8 +45,9 @@ var DataService = ["$rootScope", "$q", function ($rootScope, $q) {
     };
 }];
 
-var UserListController = ["$rootScope", "$scope", "DataService", function($rootScope, $scope, DataService){
+var UserListController = ["$timeout", "$rootScope", "$scope", "DataService", function ($timeout, $rootScope, $scope, DataService) {
     $scope.users = [];
+    $scope.test = "test";
 
     $scope.$on("InitUsers", function (event, users) {
         $scope.$apply(function () {
@@ -60,8 +61,9 @@ var UserListController = ["$rootScope", "$scope", "DataService", function($rootS
 
 
     $scope.$on("UserJoined", function (event, user) {
-        $scope.users.push(user);
-        $scope.$apply();
+        $timeout(function () {
+            $scope.users.push(user);
+        });
     });
 
     $scope.$on("UserLeft", function (event, leftUser) {
