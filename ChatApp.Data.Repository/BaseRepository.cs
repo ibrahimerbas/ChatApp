@@ -65,7 +65,9 @@ namespace ChatApp.Data.Repository
             using (dContext dataContext = (dContext)Activator.CreateInstance(typeof(dContext)))
             {
                 var q = Query(dataContext, searchText, orderby);
-                result = EntryToSurrogate(q).ToPaged(pageSize, page, out totalCount).ToList();
+                var s = EntryToSurrogate(q);
+                s = Order(s, orderby);
+                result = s.ToPaged(pageSize, page, out totalCount).ToList();
             }
             return result;
         }
