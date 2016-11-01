@@ -5,7 +5,7 @@
     <div class="message-body">
         <h4 class="message__owner-nick">{{ownerNick}} - {{timeStamp | date:"medium"}}:</h4>
         <div class="message__reply-wrapper" ng-if="replyTo">
-            <p class="message__reply-body">"{{replyTo}}"</p>
+            <p class="message__reply-body">"{{replyTo.Nickname}}: {{replyTo.Message}}</p>
         </div>
         <div class="message__img-wrapper" ng-if="image">
             <a href="{{image}}" target="_blank">
