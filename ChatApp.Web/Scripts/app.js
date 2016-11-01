@@ -30,6 +30,10 @@ var DataService = ["$rootScope", "$q", function ($rootScope, $q) {
         }
     }
 
+    sendMessage = function (message) {
+        return ChatHubProxy.invoke("SendMessage", message);
+    }
+
     /*Users*/
     ChatHubProxy.on('UserJoined', function (user) {
         $rootScope.$broadcast("UserJoined", user);
@@ -41,7 +45,8 @@ var DataService = ["$rootScope", "$q", function ($rootScope, $q) {
 
     return {
         messageSeen: messageSeen,
-        loadMessagesByScroll: loadMessagesByScroll
+        loadMessagesByScroll: loadMessagesByScroll,
+        sendMessage: sendMessage
     };
 }];
 
@@ -128,7 +133,7 @@ var MessageListController = ["$rootScope", "$scope", "DataService", "$timeout", 
         });
     });
 
-    $scope.messageClick = function(message){
+    $scope.messageClick = function (message) {
         $rootScope.$broadcast("messageClicked", message);
     }
 
@@ -152,14 +157,14 @@ var MessageDirective = function(){
 
 var EntryFactory = function(){
     return {
-        text:null,
-        timeStamp: new Date().getTime(),
+        Message: null,
         replyTo: null,
-        image: null
+        ReplyToMessageID: null,
+        AttachType: 0
     };
 }
 
-var EntryController = ["$scope", function($scope){
+var EntryController = ["DataService", "$scope", function (DataService, $scope) {
     $scope.currentMessage = null;
 
     var getInstance = function(){
@@ -172,21 +177,30 @@ var EntryController = ["$scope", function($scope){
     $scope.cleanReply = function(){
         var entry = getInstance();
         entry.replyTo = null;
+        entry.ReplyToMessage = null;
     }
 
     $scope.$on("messageClicked", function(event, message){
         var entry = getInstance();
-        console.log(message);
-        //entry.replyTo = message.owner.nick + ": " + message.text;
+        entry.replyTo = message.Nickname + ": " + message.Message;
+        entry.ReplyToMessageID = message.MessageID;
     });
 
     $scope.$on("userClicked", function(event, user){
         var entry = getInstance();
-        if (entry.text) {
-            entry.text += " ";
+        if (entry.Message) {
+            entry.Message += " ";
         }
-        entry.text = "@" + user.Name + " ";
+        entry.Message = "@" + user.Name + " ";
     });
+
+    $scope.sendMessage = function () {
+        var entry = getInstance(entry);
+        console.log(entry);
+        DataService.sendMessage(entry).done(function () {
+            $scope.currentMessage = null;
+        });
+    }
 
 }];
 

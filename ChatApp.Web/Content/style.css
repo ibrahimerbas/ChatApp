@@ -40,7 +40,7 @@ html, body{
 .user__active{
     border-radius: 10px;
     background: #E6EBE0;
-    height: 7vh;
+    height: 60px;
     margin: 1vw;
     padding: 5px;
     display: flex;
