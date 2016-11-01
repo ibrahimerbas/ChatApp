@@ -22,9 +22,9 @@
             <div class="entry__message-wrapper">
                 <form class="form-inline entry__send-form" id="entryForm" ng-submit="sendEntry()">
                     <div class="form-group entry__text-wrapper">
-                        <textarea class="entry__text" ng-model="currentMessage.text"></textarea>
+                        <textarea class="entry__text" ng-model="currentMessage.Message"></textarea>
                     </div>
-                    <button type="submit" id="entryButton" class="btn btn-default" required="required">Ver ellerine!</button>
+                    <button type="submit" id="entryButton" class="btn btn-default" ng-click="sendMessage()">Ver ellerine!</button>
                 </form>
             </div>
         </div>
