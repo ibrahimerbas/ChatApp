@@ -121,9 +121,9 @@ namespace ChatApp.Web.Helpers
                 }
                 return messageSurrogate.ID;
             }
-            catch
+            catch(Exception e)
             {
-
+                throw (e);
                 return null;
             }
         }
