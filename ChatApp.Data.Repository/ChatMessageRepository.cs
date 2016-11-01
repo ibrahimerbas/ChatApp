@@ -69,5 +69,20 @@ namespace ChatApp.Data.Repository
             entry.ReceivedDate = surrogate.ReceivedDate;
             return entry;
         }
+        public override IQueryable<ChatMessageSurrogate> Order(IQueryable<ChatMessageSurrogate> query, string orderby)
+        {
+            switch (orderby)
+            {
+                case "date":
+                    query = query.OrderBy(u => u.ReceivedDate);
+                    break;
+                case "date desc":
+                    query = query.OrderByDescending(u => u.ReceivedDate);
+                    break;
+                default:
+                    break;
+            }
+            return query;
+        }
     }
 }

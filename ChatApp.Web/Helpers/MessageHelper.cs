@@ -20,13 +20,23 @@ namespace ChatApp.Web.Helpers
                 int totalCount = 0;
                 var beforeMessages = cRepo.GetAll(null, 30, 0, out totalCount, "date", (ChatMessageSurrogate u) => u.ReceivedDate < lastMessage.ReceivedDate);
                 var afterMessages = cRepo.GetAll(null, 30, 0, out totalCount, "date", (ChatMessageSurrogate u) => u.ReceivedDate > lastMessage.ReceivedDate);
-                result.AddRange(beforeMessages.Cast<OutgoingMessageViewModel>());
+                result.AddRange(beforeMessages.Select(u=>(OutgoingMessageViewModel)u).ToList()); //beforeMessages.Cast<OutgoingMessageViewModel>());
                 OutgoingMessageViewModel lastOutgoinMessage = lastMessage;
                 lastOutgoinMessage.LastReadedMessage = true;
                 result.Add(lastOutgoinMessage);
-                result.AddRange(afterMessages.Cast<OutgoingMessageViewModel>());
+                result.AddRange(afterMessages.Select(u => (OutgoingMessageViewModel)u).ToList());
             }
             return result;
+        }
+
+        internal static Guid? GetLastMessage()
+        {
+            ChatMessageRepository cRepo = new ChatMessageRepository();
+            int totalCount = 0;
+            var lastMessmage = cRepo.GetAll(null, 30, 0, out totalCount, "date desc").LastOrDefault();
+            if (lastMessmage != null)
+                return lastMessmage.ID;
+            else return null;
         }
     }
 }

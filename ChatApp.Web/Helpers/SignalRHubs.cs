@@ -63,7 +63,7 @@ namespace ChatApp.Web.Helpers
             }
             var otherUsers = Users.Where(u => u.Value.UserID != userID).Select(u => new UserViewModel { UserID = u.Value.UserID, Name = u.Value.Name, Avatar = this.Context.User.Identity.Avatar() }).ToList();
             this.Clients.Caller.UsersInit(otherUsers);
-            var lastMessageID = Context.User.Identity.LastReadedMessage();
+            var lastMessageID = Context.User.Identity.LastReadedMessage() ?? MessageHelper.GetLastMessage();
             if (lastMessageID != null) {
                 var initMessages = MessageHelper.GetInitMessage(lastMessageID.Value);
                 if (initMessages != null && initMessages.Count > 0)
@@ -114,7 +114,7 @@ namespace ChatApp.Web.Helpers
                 messageSurrogate.ReceivedDate = DateTime.Now;
                 cRepo.Save(messageSurrogate);
                 OutgoingMessageViewModel outgoingMessage = messageSurrogate;
-                Clients.Others.IncomingMessage(outgoingMessage);
+                Clients.All.IncomingMessage(outgoingMessage);
                 if ((AttachType)messageSurrogate.AttachType != AttachType.None)
                 {
                     this.Clients.Caller.StartMessageFileUpload(messageSurrogate.ID);
@@ -134,7 +134,7 @@ namespace ChatApp.Web.Helpers
             ChatMessageRepository cRepo = new ChatMessageRepository();
             var message = cRepo.Get(messageID);
             var messages = cRepo.GetAll(null, 0, 30, out totalCount, null, (ChatMessageSurrogate u) => Up ? u.ReceivedDate < message.ReceivedDate : u.ReceivedDate > message.ReceivedDate);
-            return messages.Cast<OutgoingMessageViewModel>().ToList();
+            return messages.Select(u => (OutgoingMessageViewModel)u).ToList();//.Cast<OutgoingMessageViewModel>().ToList();
         }
 
         public void MessageReaded(Guid messageID)

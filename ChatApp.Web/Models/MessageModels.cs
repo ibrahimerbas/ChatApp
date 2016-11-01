@@ -47,7 +47,7 @@ namespace ChatApp.Web.Models
             result.ReplyToMessage = b.ReplyToMessageID != null ? GetMessage(b.ReplyToMessageID.Value) : null;
             result.UserID = b.UserID;
             result.Nickname = HttpContext.Current.User.Identity.NickName();
-            result.ReadedUsers = b.ReadedUsers.Cast<UserViewModel>().ToList();
+            result.ReadedUsers = b.ReadedUsers != null ?  b.ReadedUsers.Select(u=>(UserViewModel)u).ToList() : new List<UserViewModel>();
             return result;
         }
         public bool LastReadedMessage { get; set; }
@@ -69,8 +69,10 @@ namespace ChatApp.Web.Models
             var result = new UserViewModel();
             result.Name = b.NickName;
             result.UserID = b.ID;
+            result.Avatar = b.Avatar;
             return result;
 
         }
+        
     }
 }
