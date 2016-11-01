@@ -11,7 +11,7 @@
 <div ng-app="chatApp" class="chatroom__wrapper container-fluid">
     <div class="chatroom__user-list col-md-3 col-xs-12" ng-controller="UserListController">
         <h3 class="user__list-header">Aktif Piçler</h3>
-        <chat-user ng-repeat="user in users" nick="user.nick" avatar="user.avatar" ng-click="userClick(user)"></chat-user>
+        <chat-user ng-repeat="user in users" nick="user.Name" avatar="user.Avatar" ng-click="userClick(user)"></chat-user>
     </div>
     <div class="chatroom__message-list  col-md-9 col-xs-12">
         <div class="chatroom__message-wrapper" ng-controller="MessageListController">
