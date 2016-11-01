@@ -2,7 +2,7 @@
 #ED6A5A red
 #F4F1BB yellow
 #9BC1BC light green
-#5CA4A9 dark green
+#003D21 dark green
 #E6EBE0 light color
 */
 html, body{
@@ -119,11 +119,17 @@ html, body{
 .message__img-body{
     height: 240px;
 }
+.chatroom__message-wrapper {
+    height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 .chatroom__message-entry{
     position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
+    height: 10vh;
 }
 .entry__reply-to{
     background: #E6EBE0;
