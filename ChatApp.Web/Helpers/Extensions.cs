@@ -15,6 +15,12 @@ namespace ChatApp.Web.Helpers
             // Test for null to avoid issues during local testing
             return (claim != null) ? claim.Value : string.Empty;
         }
+        public static string Avatar(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst("Avatar");
+            // Test for null to avoid issues during local testing
+            return (claim != null) ? claim.Value : string.Empty;
+        }
         public static Guid? LastReadedMessage(this IIdentity identity)
         {
             var claim = ((ClaimsIdentity)identity).FindFirst("LastReadedMessage");

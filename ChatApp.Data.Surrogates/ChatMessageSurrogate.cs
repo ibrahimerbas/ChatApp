@@ -22,5 +22,6 @@ namespace ChatApp.Data.Surrogates
     public class UserSurrogate:BaseSurrogate<int>
     {
         public string NickName { get; set; }
+        public string Avatar { get; set; }
     }
 }

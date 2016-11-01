@@ -232,6 +232,15 @@
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
     <Compile Include="Helpers\SignalRHubs.cs" />
+    <Compile Include="Migrations\201610301624041_InitialCreate.cs" />
+    <Compile Include="Migrations\201610301624041_InitialCreate.Designer.cs">
+      <DependentUpon>201610301624041_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611011237101_Avatar Field-Added.cs" />
+    <Compile Include="Migrations\201611011237101_Avatar Field-Added.Designer.cs">
+      <DependentUpon>201611011237101_Avatar Field-Added.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -574,6 +583,14 @@
       <Project>{8d420823-8e5d-4fd5-9c9f-87a7c0f9150f}</Project>
       <Name>ChatApp.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201610301624041_InitialCreate.resx">
+      <DependentUpon>201610301624041_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611011237101_Avatar Field-Added.resx">
+      <DependentUpon>201611011237101_Avatar Field-Added.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

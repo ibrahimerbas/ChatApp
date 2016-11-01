@@ -20,7 +20,7 @@ ChatHubProxy.on('MessageReaded', function (userModel /*{UserID : 123, Name = "Re
     //Diğer kullanıcılara bildirimde bulunmak için kullanıcak.
     //Mesajın ReaderUsers arrayine eklemek gerekecek ki mesaj tekrar okundu olarak sunucuya gönderilmesin.
 });
-ChatHubProxy.on('InitMessages', function (messages) {
+ChatHubProxy.on('InitChatRoom', function (messages,otherOnlineUser) {
     //meesages = message model array
     //kullanıcı signalr ye bağlandığında son okuduğu mesaja göre mesajları topluca burayageliyor.
     //öncesinde ve sonrasında 30 message olabiliyor en fazla.

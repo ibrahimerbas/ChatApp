@@ -61,11 +61,13 @@ namespace ChatApp.Web.Helpers
                     user.ConnectionIds.Add(connectionId);
                 }
             }
+            var otherUsers = Users.Where(u => u.Value.UserID != userID).Select(u => new UserViewModel { UserID = u.Value.UserID, Name = u.Value.Name, Avatar = this.Context.User.Identity.Avatar() }).ToList();
+            this.Clients.Caller.UsersInit(otherUsers);
             var lastMessageID = Context.User.Identity.LastReadedMessage();
             if (lastMessageID != null) {
                 var initMessages = MessageHelper.GetInitMessage(lastMessageID.Value);
                 if (initMessages != null && initMessages.Count > 0)
-                    this.Clients.Caller.InitMessages(initMessages);
+                    this.Clients.Caller.InitChatRoom(initMessages, otherUsers);
             }
 
             return base.OnConnected();
