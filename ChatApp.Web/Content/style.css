@@ -4,6 +4,11 @@
 #9BC1BC light green
 #003D21 dark green
 #E6EBE0 light color
+
+#333945 light grey
+#2C303B dark grey
+#00A74C green
+
 */
 html, body{
     height: 100%;
@@ -25,9 +30,9 @@ html, body{
     overflow: hidden;
 }
 .chatroom__user-list{
-    background-color: #ED6A5A;
+    background-color: #2C303B;
+    color: #ffffff;
     height: 100%;
-
 }
 .chatroom__message-list{
     background-color: #5CA4A9;
@@ -35,29 +40,27 @@ html, body{
 }
 .user__list-header{
     font-size: 16px;
-    color: #E6EBE0;
+    color: #00A74C;
 }
 .user__active{
-    border-radius: 10px;
-    background: #E6EBE0;
     height: 60px;
-    margin: 1vw;
     padding: 5px;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
 .user__avatar{
     border-radius: 50%;
-    max-height: 100%;
-    max-width: 100%;
+    height: 48px;
+    width: 48px;
     float: left;
-    border: 2px solid #ED6A5A;
+    border: 1px solid #fff;
 }
 .user__nick{
-    font-weight: bold;
     padding-left: 5%;
-    color: #5CA4A9;
+    color: #fff;
 }
 .message__wrapper{
     margin: 10px;

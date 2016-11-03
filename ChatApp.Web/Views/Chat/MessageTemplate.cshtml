@@ -3,7 +3,7 @@
         <img class="message__owner-avatar" ng-src="{{ownerAvatar}}" />
     </div>
     <div class="message-body">
-        <h4 class="message__owner-nick">{{ownerNick}} - {{timeStamp | date:"medium"}}:</h4>
+        <h4 class="message__owner-nick">{{ownerNick}} - {{timeStamp | timeAgo}}:</h4>
         <div class="message__reply-wrapper" ng-if="replyTo">
             <p class="message__reply-body">"{{replyTo.Nickname}}: {{replyTo.Message}}</p>
         </div>
