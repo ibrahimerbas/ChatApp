@@ -38,6 +38,7 @@ namespace ChatApp.Web.Models
         public DateTime ReceivedDate { get; set; }
         public static implicit operator OutgoingMessageViewModel(ChatMessageSurrogate b)
         {
+            var user = MessageHelper.GetUser(b.UserID);
             var result = new OutgoingMessageViewModel();
             result.AttachType = (AttachType)b.AttachType;
             result.FilePath = b.FilePath;
@@ -46,7 +47,7 @@ namespace ChatApp.Web.Models
             result.ReceivedDate = b.ReceivedDate;
             result.ReplyToMessage = b.ReplyToMessageID != null ? GetMessage(b.ReplyToMessageID.Value) : null;
             result.UserID = b.UserID;
-            result.Nickname = HttpContext.Current.User.Identity.NickName();
+            result.Nickname = user!= null ? user.NickName : "Taklaya gelmiş";
             result.ReadedUsers = b.ReadedUsers != null ?  b.ReadedUsers.Select(u=>(UserViewModel)u).ToList() : new List<UserViewModel>();
             return result;
         }
