@@ -1,6 +1,7 @@
 ﻿using ChatApp.Data.Repository;
 using ChatApp.Data.Surrogates;
 using ChatApp.Web.Models;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,20 @@ namespace ChatApp.Web.Helpers
 {
     public class MessageHelper
     {
+
+        
+        public static ApplicationUserManager UserManager
+        {
+            get
+            {
+                return new ApplicationUserManager(new ApplicationUserStore(new ApplicationDbContext()));
+            }
+           
+        }
+        public static ApplicationUser GetUser(int userid)
+        {
+            return UserManager.Users.Where(u => u.Id == userid).SingleOrDefault();
+        }
         public static List<OutgoingMessageViewModel> GetInitMessage(Guid lastMessageID)
         {
             List<OutgoingMessageViewModel> result = new List<OutgoingMessageViewModel>();

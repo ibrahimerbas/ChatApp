@@ -19,14 +19,14 @@ namespace ChatApp.Web.Helpers
     {
         public static readonly ConcurrentDictionary<int, SignalRUser> Users
         = new ConcurrentDictionary<int, SignalRUser>();
-        ApplicationUserManager _userManager;
-        public ApplicationUserManager UserManager
+         ApplicationUserManager _userManager;
+        private ApplicationUserManager UserManager
         {
             get
             {
                 return _userManager ?? new System.Web.HttpContextWrapper(System.Web.HttpContext.Current).GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
-            private set
+            set
             {
                 _userManager = value;
             }
@@ -34,6 +34,8 @@ namespace ChatApp.Web.Helpers
 
         public override System.Threading.Tasks.Task OnConnected()
         {
+            if (!Context.User.Identity.IsAuthenticated)
+                throw new Exception("Giriş yap da gel! Mevlana değiliz..");
             int userID = Context.User.Identity.GetUserId<int>();
             //if (!int.TryParse(Context.QueryString["ID"], out userID))
             //{
@@ -62,7 +64,7 @@ namespace ChatApp.Web.Helpers
                 }
             }
             var otherUsers = Users.Where(u => u.Value.UserID != userID).Select(u => new UserViewModel { UserID = u.Value.UserID, Name = u.Value.Name, Avatar = this.Context.User.Identity.Avatar() }).ToList();
-            this.Clients.Caller.UsersInit(otherUsers);
+            //this.Clients.Caller.UsersInit(otherUsers);
             var lastMessageID = Context.User.Identity.LastReadedMessage() ?? MessageHelper.GetLastMessage();
             if (lastMessageID != null) {
                 var initMessages = MessageHelper.GetInitMessage(lastMessageID.Value);
