@@ -24,6 +24,11 @@ namespace ChatApp.Web
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/angular-timeago-master-core").Include(
+                "~/Scripts/angular-timeago-master/dist/angular-timeago-core.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/angular-timeago-master").Include(
+                "~/Scripts/angular-timeago-master/dist/angular-timeago.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                 "~/Scripts/angular/angular.js"));
             bundles.Add(new ScriptBundle("~/bundles/angular-animate").Include(

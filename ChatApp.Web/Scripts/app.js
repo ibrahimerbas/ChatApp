@@ -2,7 +2,7 @@
  * Created by ejder on 10/29/2016.
  */
 
-var app = angular.module("chatApp", ["ngAnimate"]);
+var app = angular.module("chatApp", ["ngAnimate", "yaru22.angular-timeago"]);
 
 var DataService = ["$rootScope", "$q", function ($rootScope, $q) {
 
