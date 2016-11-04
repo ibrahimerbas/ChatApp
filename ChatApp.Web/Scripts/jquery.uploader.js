@@ -356,7 +356,7 @@
             if (lastChunk.InProgress)
                 lastChunk.Cancel();
             else {
-                _instance.CurrentOptions.uploadAborted(_instance);
+                _instance.CurrentOptions.uploadAborted(juploaderInstance,_instance);
             }
         };
         this.PauseOrResume = function () {

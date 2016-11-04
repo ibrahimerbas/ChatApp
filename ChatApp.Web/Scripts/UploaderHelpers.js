@@ -51,9 +51,9 @@ function ClearUploader(messageClientID)
 {
     uploader.Clear(messageClientID);
 }
-function SelectFiles(messageClientID) {
+function SelectFiles(messageClientID, fileContainerID) {
     if (uploader) {
-        var parameters = { action: '/Chat/UploadFile', singleFile: false, group: messageClientID, browseComplate: function (options) { console.log(options); }, allFilesUploaded: function (groupName, options) { alert("Dosyalar Tamamlandı..") }, uploadFinished: function (instance, file, data) { $('#thumbImageThumb' + file.CurrentOptions.parameters.id).attr('src', data.imagePath + '?' + Math.random()); }, createItemFunction: CreateFileItem, fileRemoved: UploaderFileRemoved, containerElementID: 'fileContainer', parameters: { MessageID: null }, ResumeCheckUrl: '/Chat/ExistsFileLength' };
+        var parameters = { action: '/Chat/UploadFile', singleFile: false, group: messageClientID, browseComplate: function (options) { console.log(options); }, allFilesUploaded: function (groupName, options) { alert("Dosyalar Tamamlandı..") }, uploadFinished: function (instance, file, data) { $('#thumbImageThumb' + file.CurrentOptions.parameters.id).attr('src', data.imagePath + '?' + Math.random()); }, createItemFunction: CreateFileItem, fileRemoved: UploaderFileRemoved, containerElementID: fileContainerID, parameters: { MessageID: null }, ResumeCheckUrl: '/Chat/ExistsFileLength' };
         uploader.Browse(parameters);
     }
 }
