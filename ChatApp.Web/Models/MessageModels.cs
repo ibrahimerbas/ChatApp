@@ -33,15 +33,13 @@ namespace ChatApp.Web.Models
         List<UserViewModel> ReadedUsers { get; set; }
         public OutgoingMessageViewModel ReplyToMessage { get; set; }
         public string Message { get; set; }
-        public AttachType AttachType { get; set; }
-        public string FilePath { get; set; }
+        //public AttachType AttachType { get; set; }
+        //public string FilePath { get; set; }
         public DateTime ReceivedDate { get; set; }
         public static implicit operator OutgoingMessageViewModel(ChatMessageSurrogate b)
         {
             var user = MessageHelper.GetUser(b.UserID);
             var result = new OutgoingMessageViewModel();
-            result.AttachType = (AttachType)b.AttachType;
-            result.FilePath = b.FilePath;
             result.Message = b.Message;
             result.MessageID = b.ID;
             result.ReceivedDate = b.ReceivedDate;
@@ -49,9 +47,12 @@ namespace ChatApp.Web.Models
             result.UserID = b.UserID;
             result.Nickname = user!= null ? user.NickName : "Taklaya gelmiş";
             result.ReadedUsers = b.ReadedUsers != null ?  b.ReadedUsers.Select(u=>(UserViewModel)u).ToList() : new List<UserViewModel>();
+            result.Files = b.Files != null ? b.Files.Select(u => (MessageFileViewModel)u).ToList() : new List<MessageFileViewModel>();
             return result;
         }
         public bool LastReadedMessage { get; set; }
+        public List<MessageFileViewModel> Files { get; set; }
+
         public static OutgoingMessageViewModel GetMessage(Guid messageID)
         {
             ChatMessageRepository cRepo = new ChatMessageRepository();
@@ -60,6 +61,25 @@ namespace ChatApp.Web.Models
             return result;
         }
     }
+
+    public class MessageFileViewModel
+    {
+        public Guid MessageID { get; set; }
+        public int AttachType { get; set; }
+        public string FilePath { get; set; }
+
+        public static implicit operator MessageFileViewModel(MessageFileSurrogate b)
+        {
+            var result = new MessageFileViewModel();
+            result.FilePath = b.FilePath;
+            result.AttachType= b.AttachType;
+            result.MessageID = b.MessageID;
+            return result;
+
+        }
+    }
+
+
     public class UserViewModel
     {
         public int UserID { get; set; }
@@ -72,8 +92,6 @@ namespace ChatApp.Web.Models
             result.UserID = b.ID;
             result.Avatar = b.Avatar;
             return result;
-
         }
-        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using _24ayar.Web.Utility;
 using ChatApp.Data.Repository;
+using ChatApp.Data.Surrogates;
 using ChatApp.Web.Helpers;
 using ChatApp.Web.Models;
 using System;
@@ -75,6 +76,7 @@ namespace ChatApp.Web.Controllers
               string FileType,
               string FileName,
               string RelativePath,
+              int AttachType,
               Guid MessageID)
         {
             string result = AppendFile(File,
@@ -106,12 +108,15 @@ namespace ChatApp.Web.Controllers
                     string chatFileDir = Server.MapPath(ChatFileDir);
                     if (!Directory.Exists(chatFileDir))
                         Directory.CreateDirectory(chatFileDir);
-                    string fullFilePath = string.Format("{0}\{1}", chatFileDir, newFileName);
+                    string fullFilePath = string.Format("{0}\\{1}", chatFileDir, newFileName);
                     fileInfo.MoveTo(fullFilePath);
                     string absoluteFilePath = Url.Content(string.Format("{0}/{1}", ChatFileDir, newFileName));
                     try
                     {
-                        message.FilePath = absoluteFilePath;
+                        MessageFileSurrogate fileSurrogate = new MessageFileSurrogate();
+                        fileSurrogate.FilePath = absoluteFilePath;
+                        fileSurrogate.AttachType = AttachType;
+                        message.Files.Add(fileSurrogate);
                         cRepo.Save(message);
 
                     }

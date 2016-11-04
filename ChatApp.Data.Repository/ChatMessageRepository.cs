@@ -32,7 +32,8 @@ namespace ChatApp.Data.Repository
                         ReplyToMessageID = c.ReplyToMessageID,
                         UserID = c.UserID,
                         ReadedUsers = c.AspNetUsers.Select(u => new UserSurrogate { ID = u.Id, NickName = u.NickName, Avatar = u.Avatar }).ToList(),
-                        ReceivedDate = c.ReceivedDate
+                        ReceivedDate = c.ReceivedDate,
+                        Files = c.MessageFiles.Select(u=> new MessageFileSurrogate { AttachType = u.AttachType, FilePath = u.FilePath, ID  = u.id, MessageID = u.MessageID }).ToList()
                     });
         }
 
@@ -51,6 +52,10 @@ namespace ChatApp.Data.Repository
 
             var readedUser = surrogate.ReadedUsers != null ? surrogate.ReadedUsers.Select(u => (from c in dataContext.AspNetUsers where c.Id == u.ID select c).SingleOrDefault()).ToList() : null;
             entry.AspNetUsers.Edit(dataContext, dataContext.AspNetUsers, readedUser, x => x.Id);
+
+            var messageFiles = surrogate.Files != null ? surrogate.Files.Select(u => new MessageFile { AttachType = u.AttachType,  FilePath = u.FilePath}).ToList() : null;
+            entry.MessageFiles.EditDetailed(dataContext, dataContext.MessageFiles, messageFiles, x => x.id);
+
 
             dataContext.SaveChanges();
             surrogate.ID = entry.ID;

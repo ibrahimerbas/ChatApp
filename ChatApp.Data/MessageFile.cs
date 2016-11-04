@@ -14,6 +14,7 @@ namespace ChatApp.Data
     
     public partial class MessageFile
     {
+        public int id { get; set; }
         public System.Guid MessageID { get; set; }
         public string FilePath { get; set; }
         public int AttachType { get; set; }

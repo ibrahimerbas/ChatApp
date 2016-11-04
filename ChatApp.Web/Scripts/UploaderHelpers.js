@@ -58,10 +58,10 @@ function SelectFiles(messageClientID, fileContainerID) {
     }
 }
 
-function StartUpload(messageClientID, MessageID, allFilesUploadedCallback, uploadErrorCallback)
+function StartUpload(messageClientID, MessageID,AttachType, allFilesUploadedCallback, uploadErrorCallback)
 {
     
-    var params = { MessageID: MessageID || "0000000-0000-0000-0000-000000000000" };
+    var params = { MessageID: MessageID || "0000000-0000-0000-0000-000000000000", AttachType : AttachType || 0 };
     
     uploader.ChangeGroupParemeters(messageClientID, {
         parameters: params, allFilesUploaded: allFilesUploadedCallback || function (groupName, options) {

@@ -9,7 +9,7 @@
 }
 @*@Html.EditorFor(m => ViewData["UploadFile"], "Uploader", new { Model = ViewData["UploadImage"] })*@
 <a class="btn btn-primary juploader" data-uploader-group="ClientMessageID" onclick="SelectFiles('ClientMessageID','fileContainer');return false;">Dosya Seç</a>
-<a class="btn btn-primary" onclick="StartUpload('ClientMessageID', '5d56bfa9-9ba8-4c88-a3f9-8e50fd6bae98'/*,allFilesUploadedCallback,uploadErrorCallback*/); return false;">Yükle</a>
+<a class="btn btn-primary" onclick="StartUpload('ClientMessageID', '5d56bfa9-9ba8-4c88-a3f9-8e50fd6bae98',0/*,allFilesUploadedCallback,uploadErrorCallback*/); return false;">Yükle</a>
 <div id="fileContainer">
     file container
 </div>

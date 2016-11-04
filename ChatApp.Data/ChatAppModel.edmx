@@ -30,20 +30,17 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="Message" Type="nvarchar(max)" />
           <Property Name="ReplyToMessageID" Type="uniqueidentifier" />
           <Property Name="ReceivedDate" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'chatapp.dbo.MessageFiles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="MessageFiles">
           <Key>
-            <PropertyRef Name="MessageID" />
-            <PropertyRef Name="FilePath" />
-            <PropertyRef Name="AttachType" />
+            <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MessageID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="FilePath" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="AttachType" Type="int" Nullable="false" />
@@ -107,14 +104,8 @@ warning 6002: The table/view 'chatapp.dbo.MessageFiles' does not have a primary 
         <EntityContainer Name="ChatAppModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChatMessages" EntityType="Self.ChatMessages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MessageFiles" EntityType="Self.MessageFiles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReadedUsers" EntityType="Self.ReadedUsers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MessageFiles" EntityType="Self.MessageFiles" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [MessageFiles].[MessageID] AS [MessageID], 
-    [MessageFiles].[FilePath] AS [FilePath], 
-    [MessageFiles].[AttachType] AS [AttachType]
-    FROM [dbo].[MessageFiles] AS [MessageFiles]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_ChatMessages_AspNetUsers" Association="Self.FK_ChatMessages_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="ChatMessages" EntitySet="ChatMessages" />
@@ -180,7 +171,7 @@ warning 6002: The table/view 'chatapp.dbo.MessageFiles' does not have a primary 
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="ID" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ReplyToMessageID" Type="Guid" />
@@ -191,10 +182,9 @@ warning 6002: The table/view 'chatapp.dbo.MessageFiles' does not have a primary 
         </EntityType>
         <EntityType Name="MessageFile">
           <Key>
-            <PropertyRef Name="MessageID" />
-            <PropertyRef Name="FilePath" />
-            <PropertyRef Name="AttachType" />
+            <PropertyRef Name="id" />
           </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MessageID" Type="Guid" Nullable="false" />
           <Property Name="FilePath" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="AttachType" Type="Int32" Nullable="false" />
@@ -273,6 +263,7 @@ warning 6002: The table/view 'chatapp.dbo.MessageFiles' does not have a primary 
                 <ScalarProperty Name="AttachType" ColumnName="AttachType" />
                 <ScalarProperty Name="FilePath" ColumnName="FilePath" />
                 <ScalarProperty Name="MessageID" ColumnName="MessageID" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
