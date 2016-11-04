@@ -30,13 +30,23 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="Message" Type="nvarchar(max)" />
-          <Property Name="AttachType" Type="tinyint" Nullable="false" />
           <Property Name="ReplyToMessageID" Type="uniqueidentifier" />
-          <Property Name="FilePath" Type="nvarchar" MaxLength="1000" />
           <Property Name="ReceivedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'chatapp.dbo.MessageFiles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MessageFiles">
+          <Key>
+            <PropertyRef Name="MessageID" />
+            <PropertyRef Name="FilePath" />
+            <PropertyRef Name="AttachType" />
+          </Key>
+          <Property Name="MessageID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="AttachType" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ReadedUsers">
           <Key>
@@ -55,6 +65,18 @@
             </Principal>
             <Dependent Role="ChatMessages">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MessageFiles_ChatMessages">
+          <End Role="ChatMessages" Type="Self.ChatMessages" Multiplicity="1" />
+          <End Role="MessageFiles" Type="Self.MessageFiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChatMessages">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MessageFiles">
+              <PropertyRef Name="MessageID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -86,9 +108,20 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChatMessages" EntityType="Self.ChatMessages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReadedUsers" EntityType="Self.ReadedUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MessageFiles" EntityType="Self.MessageFiles" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MessageFiles].[MessageID] AS [MessageID], 
+    [MessageFiles].[FilePath] AS [FilePath], 
+    [MessageFiles].[AttachType] AS [AttachType]
+    FROM [dbo].[MessageFiles] AS [MessageFiles]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_ChatMessages_AspNetUsers" Association="Self.FK_ChatMessages_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="ChatMessages" EntitySet="ChatMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MessageFiles_ChatMessages" Association="Self.FK_MessageFiles_ChatMessages">
+            <End Role="ChatMessages" EntitySet="ChatMessages" />
+            <End Role="MessageFiles" EntitySet="MessageFiles" />
           </AssociationSet>
           <AssociationSet Name="FK_ReadedUsers_AspNetUsers" Association="Self.FK_ReadedUsers_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -106,9 +139,14 @@
         <EntityContainer Name="ChatAppEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AspNetUsers" EntityType="ChatAppModel.AspNetUser" />
           <EntitySet Name="ChatMessages" EntityType="ChatAppModel.ChatMessage" />
+          <EntitySet Name="MessageFiles" EntityType="ChatAppModel.MessageFile" />
           <AssociationSet Name="FK_ChatMessages_AspNetUsers" Association="ChatAppModel.FK_ChatMessages_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="ChatMessage" EntitySet="ChatMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MessageFiles_ChatMessages" Association="ChatAppModel.FK_MessageFiles_ChatMessages">
+            <End Role="ChatMessage" EntitySet="ChatMessages" />
+            <End Role="MessageFile" EntitySet="MessageFiles" />
           </AssociationSet>
           <AssociationSet Name="ReadedUsers" Association="ChatAppModel.ReadedUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
@@ -134,23 +172,33 @@
           <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ChatMessages" Relationship="ChatAppModel.FK_ChatMessages_AspNetUsers" FromRole="AspNetUser" ToRole="ChatMessage" />
           <NavigationProperty Name="ChatMessages1" Relationship="ChatAppModel.ReadedUsers" FromRole="AspNetUser" ToRole="ChatMessage" />
-          <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ChatMessage">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="Guid" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AttachType" Type="Byte" Nullable="false" />
           <Property Name="ReplyToMessageID" Type="Guid" />
-          <Property Name="FilePath" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="ReceivedDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="AspNetUser" Relationship="ChatAppModel.FK_ChatMessages_AspNetUsers" FromRole="ChatMessage" ToRole="AspNetUser" />
+          <NavigationProperty Name="MessageFiles" Relationship="ChatAppModel.FK_MessageFiles_ChatMessages" FromRole="ChatMessage" ToRole="MessageFile" />
           <NavigationProperty Name="AspNetUsers" Relationship="ChatAppModel.ReadedUsers" FromRole="ChatMessage" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="MessageFile">
+          <Key>
+            <PropertyRef Name="MessageID" />
+            <PropertyRef Name="FilePath" />
+            <PropertyRef Name="AttachType" />
+          </Key>
+          <Property Name="MessageID" Type="Guid" Nullable="false" />
+          <Property Name="FilePath" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AttachType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ChatMessage" Relationship="ChatAppModel.FK_MessageFiles_ChatMessages" FromRole="MessageFile" ToRole="ChatMessage" />
         </EntityType>
         <Association Name="FK_ChatMessages_AspNetUsers">
           <End Type="ChatAppModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
@@ -161,6 +209,18 @@
             </Principal>
             <Dependent Role="ChatMessage">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MessageFiles_ChatMessages">
+          <End Type="ChatAppModel.ChatMessage" Role="ChatMessage" Multiplicity="1" />
+          <End Type="ChatAppModel.MessageFile" Role="MessageFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChatMessage">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MessageFile">
+              <PropertyRef Name="MessageID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -200,12 +260,19 @@
             <EntityTypeMapping TypeName="ChatAppModel.ChatMessage">
               <MappingFragment StoreEntitySet="ChatMessages">
                 <ScalarProperty Name="ReceivedDate" ColumnName="ReceivedDate" />
-                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
                 <ScalarProperty Name="ReplyToMessageID" ColumnName="ReplyToMessageID" />
-                <ScalarProperty Name="AttachType" ColumnName="AttachType" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MessageFiles">
+            <EntityTypeMapping TypeName="ChatAppModel.MessageFile">
+              <MappingFragment StoreEntitySet="MessageFiles">
+                <ScalarProperty Name="AttachType" ColumnName="AttachType" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="MessageID" ColumnName="MessageID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

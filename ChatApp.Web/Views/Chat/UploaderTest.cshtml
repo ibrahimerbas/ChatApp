@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Uploader";
+}
+
+@section scripts{
+  
+    @Scripts.Render("~/bundles/uploader")
+}
+@*@Html.EditorFor(m => ViewData["UploadFile"], "Uploader", new { Model = ViewData["UploadImage"] })*@
+<a class="btn btn-primary juploader" data-uploader-group="MessageFile" onclick="StartUploads('GUID');return false;">Dosya Yükle</a>
+<div id="fileContainer">
+    file container
+
+</div>

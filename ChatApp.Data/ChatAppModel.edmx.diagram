@@ -6,8 +6,10 @@
     <edmx:Diagrams>
       <Diagram DiagramId="0bbb19fbf20348739b7f8d41b28a69f3" Name="Diagram1">
         <EntityTypeShape EntityType="ChatAppModel.AspNetUser" Width="1.5" PointX="0.75" PointY="1" />
-        <EntityTypeShape EntityType="ChatAppModel.ChatMessage" Width="1.5" PointX="3" PointY="1.75" />
+        <EntityTypeShape EntityType="ChatAppModel.ChatMessage" Width="1.5" PointX="3" PointY="2" />
+        <EntityTypeShape EntityType="ChatAppModel.MessageFile" Width="1.5" PointX="5.25" PointY="2.375" />
         <AssociationConnector Association="ChatAppModel.FK_ChatMessages_AspNetUsers" />
+        <AssociationConnector Association="ChatAppModel.FK_MessageFiles_ChatMessages" />
         <AssociationConnector Association="ChatAppModel.ReadedUsers" />
       </Diagram>
     </edmx:Diagrams>

@@ -17,11 +17,19 @@ namespace ChatApp.Data.Surrogates
         public string FilePath { get; set; }
         public DateTime ReceivedDate { get; set; }
         public List<UserSurrogate> ReadedUsers { get; set; }
+
+        public List<MessageFileSurrogate> Files { get; set; }
     }
 
     public class UserSurrogate:BaseSurrogate<int>
     {
         public string NickName { get; set; }
         public string Avatar { get; set; }
+    }
+
+    public class MessageFileSurrogate : BaseSurrogate<Guid>
+    {
+        public string FilePath { get; set; }
+        public int AttachType { get; set; }
     }
 }

@@ -28,8 +28,6 @@ namespace ChatApp.Data.Repository
                     select new ChatMessageSurrogate
                     {
                         ID = c.ID,
-                        AttachType = c.AttachType,
-                        FilePath = c.FilePath,
                         Message = c.Message,
                         ReplyToMessageID = c.ReplyToMessageID,
                         UserID = c.UserID,
@@ -64,8 +62,8 @@ namespace ChatApp.Data.Repository
             entry.Message = surrogate.Message;
             entry.ReplyToMessageID = surrogate.ReplyToMessageID;
             entry.UserID = surrogate.UserID;
-            entry.AttachType = surrogate.AttachType;
-            entry.FilePath = surrogate.FilePath;
+            //entry.AttachType = surrogate.AttachType;
+            //entry.FilePath = surrogate.FilePath;
             entry.ReceivedDate = surrogate.ReceivedDate;
             return entry;
         }

@@ -72,6 +72,9 @@
     <Compile Include="ChatMessage.cs">
       <DependentUpon>ChatAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MessageFile.cs">
+      <DependentUpon>ChatAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
