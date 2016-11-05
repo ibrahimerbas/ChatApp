@@ -27,5 +27,6 @@ namespace ChatApp.Data
     
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<ChatMessage> ChatMessages { get; set; }
+        public virtual DbSet<MessageFile> MessageFiles { get; set; }
     }
 }

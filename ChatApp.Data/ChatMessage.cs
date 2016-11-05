@@ -17,18 +17,19 @@ namespace ChatApp.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ChatMessage()
         {
+            this.MessageFiles = new HashSet<MessageFile>();
             this.AspNetUsers = new HashSet<AspNetUser>();
         }
     
         public System.Guid ID { get; set; }
         public int UserID { get; set; }
         public string Message { get; set; }
-        public byte AttachType { get; set; }
         public Nullable<System.Guid> ReplyToMessageID { get; set; }
-        public string FilePath { get; set; }
         public System.DateTime ReceivedDate { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MessageFile> MessageFiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
     }

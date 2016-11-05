@@ -20,6 +20,8 @@ namespace ChatApp.Web
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/uploader").Include("~/Scripts/jquery.uploader.js","~/Scripts/UploaderHelpers.js"/*,"~/Scripts/CryptoJS/core-min.js", "~/Scripts/CryptoJS/md5-min.js"*/));
+
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));

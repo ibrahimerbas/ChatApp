@@ -28,13 +28,12 @@ namespace ChatApp.Data.Repository
                     select new ChatMessageSurrogate
                     {
                         ID = c.ID,
-                        AttachType = c.AttachType,
-                        FilePath = c.FilePath,
                         Message = c.Message,
                         ReplyToMessageID = c.ReplyToMessageID,
                         UserID = c.UserID,
                         ReadedUsers = c.AspNetUsers.Select(u => new UserSurrogate { ID = u.Id, NickName = u.NickName, Avatar = u.Avatar }).ToList(),
-                        ReceivedDate = c.ReceivedDate
+                        ReceivedDate = c.ReceivedDate,
+                        Files = c.MessageFiles.Select(u=> new MessageFileSurrogate { AttachType = u.AttachType, FilePath = u.FilePath, ID  = u.id, MessageID = u.MessageID }).ToList()
                     });
         }
 
@@ -54,6 +53,10 @@ namespace ChatApp.Data.Repository
             var readedUser = surrogate.ReadedUsers != null ? surrogate.ReadedUsers.Select(u => (from c in dataContext.AspNetUsers where c.Id == u.ID select c).SingleOrDefault()).ToList() : null;
             entry.AspNetUsers.Edit(dataContext, dataContext.AspNetUsers, readedUser, x => x.Id);
 
+            var messageFiles = surrogate.Files != null ? surrogate.Files.Select(u => new MessageFile { AttachType = u.AttachType,  FilePath = u.FilePath}).ToList() : null;
+            entry.MessageFiles.EditDetailed(dataContext, dataContext.MessageFiles, messageFiles, x => x.id);
+
+
             dataContext.SaveChanges();
             surrogate.ID = entry.ID;
         }
@@ -64,8 +67,8 @@ namespace ChatApp.Data.Repository
             entry.Message = surrogate.Message;
             entry.ReplyToMessageID = surrogate.ReplyToMessageID;
             entry.UserID = surrogate.UserID;
-            entry.AttachType = surrogate.AttachType;
-            entry.FilePath = surrogate.FilePath;
+            //entry.AttachType = surrogate.AttachType;
+            //entry.FilePath = surrogate.FilePath;
             entry.ReceivedDate = surrogate.ReceivedDate;
             return entry;
         }

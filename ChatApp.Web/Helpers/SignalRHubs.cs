@@ -109,7 +109,7 @@ namespace ChatApp.Web.Helpers
                 string nickName = HttpContext.Current.User.Identity.NickName();
                 ChatMessageRepository cRepo = new ChatMessageRepository();
                 var messageSurrogate = cRepo.CreateNewInstance(message.Message);
-                messageSurrogate.AttachType = (byte)message.AttachType;
+                //messageSurrogate.AttachType = (byte)message.AttachType;
 
                 messageSurrogate.ReplyToMessageID = message.ReplyToMessageID;
                 messageSurrogate.UserID = userID;
@@ -117,13 +117,13 @@ namespace ChatApp.Web.Helpers
                 cRepo.Save(messageSurrogate);
                 OutgoingMessageViewModel outgoingMessage = messageSurrogate;
                 Clients.All.IncomingMessage(outgoingMessage);
-                if ((AttachType)messageSurrogate.AttachType != AttachType.None)
-                {
-                    this.Clients.Caller.StartMessageFileUpload(messageSurrogate.ID);
-                }
+                //if ((AttachType)messageSurrogate.AttachType != AttachType.None)
+                //{
+                //    this.Clients.Caller.StartMessageFileUpload(messageSurrogate.ID);
+                //}
                 return messageSurrogate.ID;
             }
-            catch(Exception e)
+            catch
             {
                 
                 return null;
