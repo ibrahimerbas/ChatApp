@@ -37,7 +37,7 @@ namespace ChatApp.Web.Controllers
                 if (!Directory.Exists(chatFileDir))
                     Directory.CreateDirectory(chatFileDir);
                 File.SaveAs(Server.MapPath(string.Format("{0}/{1}", chatFileDir, newFileName)));
-                return Json(new { Result = "OK" , FilePath = Url.Content(string.Format("{0}/{1}",ChatFileDir,newFileName) });
+                return Json(new { Result = "OK" , FilePath = Url.Content(string.Format("{0}/{1}",ChatFileDir,newFileName))});
             }
             catch (Exception e)
             {

@@ -88,7 +88,10 @@ var UserDirective = function(){
         transclude: false,
         scope: {
             nick:"=nick",
-            avatar:"=avatar"
+            avatar: "=avatar"
+        },
+        link: function (scope, elem, attrs) {
+            scope.loggedInAt = new Date();
         }
     };
 };
@@ -204,6 +207,9 @@ var EntryController = ["DataService", "$scope", function (DataService, $scope) {
 
 }];
 
+app.config(function (timeAgoSettings) {
+    timeAgoSettings.overrideLang = 'tr_TR';
+});
 app.service("DataService", DataService);
 app.controller("UserListController", UserListController);
 app.controller("MessageListController", MessageListController);
