@@ -25,6 +25,10 @@ namespace ChatApp.Web.Helpers
         
         //public Mock<IChatRepository> MockChatRepository { get; private set; }
         public IConfigurationManager _config;
+        public ChatHub()
+        {
+
+        }
         public ChatHub(string username, string password)
 
         {
@@ -60,14 +64,14 @@ namespace ChatApp.Web.Helpers
 
         public static readonly ConcurrentDictionary<int, SignalRUser> Users
         = new ConcurrentDictionary<int, SignalRUser>();
-         static ApplicationUserManager  _userManager;
+        ApplicationUserManager  _userManager;
         //private static ApplicationSignInManager _signInManager;
 
-        private static ApplicationUserManager UserManager
+        private ApplicationUserManager UserManager
         {
             get
             {
-                return new ApplicationUserManager(new ApplicationUserStore(new ApplicationDbContext()));
+                return _userManager = _userManager ?? new ApplicationUserManager(new ApplicationUserStore(new ApplicationDbContext()));
             }
             set
             {
@@ -203,6 +207,7 @@ namespace ChatApp.Web.Helpers
             {
                 if (!message.ReadedUsers.Any(u => u.ID == userid))
                 {
+                    //var userManager = UserManager;
                     message.ReadedUsers.Add(new UserSurrogate { ID = userid, NickName = Context.User.Identity.NickName() });
                     cRepo.Save(message);
                     var user = UserManager.Users.Where(u => u.Id == userid).SingleOrDefault();
