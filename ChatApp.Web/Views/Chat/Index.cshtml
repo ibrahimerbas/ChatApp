@@ -21,7 +21,7 @@
     </div>
     <div class="chatroom__message-list  col-md-9 col-xs-12">
         <div id="chatroom__message-list--scrollable" class="chatroom__message-wrapper" ng-controller="MessageListController">
-            <chat-message ng-repeat="message in messages" text="message.Message" image="message.FilePath" ownernick="message.Nickname" owneravatar="message.owner.avatar" replyto="message.ReplyToMessage" date="message.ReceivedDate" ng-click="messageClick(message)"></chat-message>
+            <chat-message ng-repeat="message in messages" message-data="message"></chat-message>
         </div>
         <div class="chatroom__message-entry" ng-controller="EntryController">
             <div class="entry__reply-to" ng-if="currentMessage.replyTo">"{{currentMessage.replyTo}}"<button ng-click="cleanReply()" type="button" class="close"><span>&times;</span></button></div>

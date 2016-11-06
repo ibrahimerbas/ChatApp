@@ -88,7 +88,10 @@ var UserDirective = function(){
         transclude: false,
         scope: {
             nick:"=nick",
-            avatar:"=avatar"
+            avatar: "=avatar"
+        },
+        link: function (scope, elem, attrs) {
+            scope.loggedInAt = new Date();
         }
     };
 };
@@ -133,8 +136,21 @@ var MessageListController = ["$rootScope", "$scope", "DataService", "$timeout", 
         });
     });
 
-    $scope.messageClick = function (message) {
+    $scope.messageReplied = function (message) {
         $rootScope.$broadcast("messageClicked", message);
+    }
+
+    $scope.messageSeen = function (message) {
+        if (message.ReadedUsers.length > 0) {
+            var readed = _.findIndex(message.ReadedUsers, function (user) {
+                return (myUserID == user.UserID);
+            });
+            if (readed == -1) {
+                DataService.messageSeen(message.MessageID);
+            }
+        } else {
+            DataService.messageSeen(message.MessageID);
+        }
     }
 
 }];
@@ -150,7 +166,8 @@ var MessageDirective = function(){
             image:"=?image",
             ownerNick:"=ownernick",
             ownerAvatar:"=owneravatar",
-            replyTo:"=?replyto"
+            replyTo: "=?replyto",
+            messageData: "="
         }
     };
 };
@@ -204,6 +221,9 @@ var EntryController = ["DataService", "$scope", function (DataService, $scope) {
 
 }];
 
+app.config(function (timeAgoSettings) {
+    timeAgoSettings.overrideLang = 'tr_TR';
+});
 app.service("DataService", DataService);
 app.controller("UserListController", UserListController);
 app.controller("MessageListController", MessageListController);

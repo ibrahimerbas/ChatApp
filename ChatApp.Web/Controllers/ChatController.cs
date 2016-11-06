@@ -43,7 +43,6 @@ namespace ChatApp.Web.Controllers
             string RelativePath,
             Guid MessageID)
         {
-            //Thread.Sleep(10000);
             string FilePath = Server.MapPath("~/Temp");
             FilePath = Path.Combine(FilePath, FileName);
             byte[] fileData = null;
