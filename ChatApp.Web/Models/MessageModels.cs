@@ -30,7 +30,7 @@ namespace ChatApp.Web.Models
         public Guid MessageID { get; set; }
         public string Nickname { get; set; }
         public int UserID { get; set; }
-        List<UserViewModel> ReadedUsers { get; set; }
+        public List<UserViewModel> ReadedUsers { get; set; }
         public OutgoingMessageViewModel ReplyToMessage { get; set; }
         public string Message { get; set; }
         //public AttachType AttachType { get; set; }
