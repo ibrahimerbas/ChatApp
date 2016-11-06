@@ -21,8 +21,7 @@ var DataService = ["$rootScope", "$q", function ($rootScope, $q) {
     });
 
     messageSeen = function (messageID) {
-        console.log(messageID);
-        //ChatHubProxy.invoke('MessageReaded', messageID);
+        ChatHubProxy.invoke('MessageReaded', messageID);
     }
 
     loadMessagesByScroll = function (messageID) {
@@ -142,8 +141,16 @@ var MessageListController = ["$rootScope", "$scope", "DataService", "$timeout", 
     }
 
     $scope.messageSeen = function (message) {
-        console.log(message);
-        //DataService.messageSeen(messageId);
+        if (message.ReadedUsers.length > 0) {
+            var readed = _.findIndex(message.ReadedUsers, function (user) {
+                return (myUserID == user.UserID);
+            });
+            if (readed == -1) {
+                DataService.messageSeen(message.MessageID);
+            }
+        } else {
+            DataService.messageSeen(message.MessageID);
+        }
     }
 
 }];
