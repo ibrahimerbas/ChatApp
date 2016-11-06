@@ -1,10 +1,5 @@
 /*
-#ED6A5A red
-#F4F1BB yellow
-#9BC1BC light green
-#003D21 dark green
-#E6EBE0 light color
-
+#e5e5e5 lightest grey
 #333945 light grey
 #2C303B dark grey
 #00A74C green
@@ -35,12 +30,12 @@ html, body{
     height: 100%;
 }
 .chatroom__message-list{
-    background-color: #5CA4A9;
+    background-color: #333945;
     height: 100%;
 }
 .user__list-header{
     font-size: 16px;
-    color: #00A74C;
+    color: #fff;
 }
 .user__active{
     height: 60px;
@@ -50,72 +45,80 @@ html, body{
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    position: relative;
 }
 .user__avatar{
     border-radius: 50%;
     height: 48px;
     width: 48px;
     float: left;
-    border: 1px solid #fff;
+    border: 1px solid #00A74C;
 }
 .user__nick{
     padding-left: 5%;
     color: #fff;
 }
+.user__loggedin {
+    font-size: 12px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
 .message__wrapper{
     margin: 10px;
 }
 .message-body{
-    border-radius: 10px;
-    background: #E6EBE0;
+    background: #fff;
+    border: 1px solid #00A74C;
     padding: 10px;
-    float: left;
-    width: 90%;
     position: relative;
 }
 .message-body:after{
     content: "";
     display: block;
     position: absolute;
-    left: -15px;
+    left: -16px;
     top: 5px;
     width: 0;
-    border-width: 15px 15px 0;
+    border-width: 15px 0 0 15px;
     border-style: solid;
-    border-color: #E6EBE0 transparent;
+    border-color: #00A74C transparent;
+}
+.message-body__options {
+    position: absolute;
+    top: 15px;
+    left: 14px;
 }
 .message__header-wrapper{
-    height: 5vh;
-    float: left;
-    width: 10%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .message__owner-avatar{
     border-radius: 50%;
-    max-height: 100%;
-    max-width: 100%;
-    border: 2px solid #ED6A5A;
+    height: 60px;
+    width: 60px;
+    border: 1px solid #00A74C;
 }
 .message__owner-nick{
-    color: #5CA4A9;
-    border-bottom: 1px solid #5CA4A9;
+    color: #2C303B;
+    border-bottom: 1px solid #e5e5e5;
     margin: 5px;
     padding: 5px;
+    padding-left: 25px;
 }
 .message__reply-wrapper{
-    border-bottom: 1px solid #5CA4A9;
+    border-bottom: 1px solid #e5e5e5;
     margin: 5px;
     padding: 5px;
 }
 .message__reply-body{
-    color: #ED6A5A;
+    color: #2C303B;
     font-style: italic;
     font-size: 12px;
 }
 .message__img-wrapper{
-    border-bottom: 1px solid #5CA4A9;
+    border-bottom: 1px solid #e5e5e5;
     margin: 5px;
     padding: 5px;
 }
@@ -123,7 +126,7 @@ html, body{
     height: 240px;
 }
 .chatroom__message-wrapper {
-    height: 90vh;
+    height: 86%;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -132,16 +135,19 @@ html, body{
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 10vh;
+    height: 14%;
 }
 .entry__reply-to{
-    background: #E6EBE0;
+    background: #2C303B;
+    color: #00A74C;
     margin: 5px;
     padding: 5px;
-    border-radius: 5px;
     display: block;
-    color: #5CA4A9;
     font-style: italic;
+    border: 1px solid #00A74C;
+}
+.entry__reply-to button {
+    color: #00A74C;
 }
 .entry__message-wrapper{
     margin: 5px;
