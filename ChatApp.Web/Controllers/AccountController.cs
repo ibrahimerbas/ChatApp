@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ChatApp.Web.Models;
+using ChatApp.Web.Helpers;
+using System.IO;
 
 namespace ChatApp.Web.Controllers
 {
@@ -51,7 +53,51 @@ namespace ChatApp.Web.Controllers
                 _userManager = value;
             }
         }
-
+        
+        public new ActionResult Profile()
+        {
+            var model = new ProfileViewModel();
+            model.Nickname = User.Identity.NickName();
+            model.Avatar = User.Identity.Avatar();
+            return View(model);
+        }
+        [HttpPost]
+        public new ActionResult Profile(ProfileViewModel model, HttpPostedFileBase file)
+        {
+            //var model = new ProfileViewModel();
+            //model.Nickname = User.Identity.NickName();
+            //model.Avatar = User.Identity.Avatar();
+            string avantarFolder = "~/Avatars";
+            if (ModelState.IsValid) {
+                int userid = User.Identity.GetUserId<int>();
+                var user = UserManager.Users.Where(u => u.Id == userid).SingleOrDefault();
+                if (user != null)
+                {
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        FileInfo fi = new FileInfo(file.FileName);
+                        var extension = fi.Extension.ToLowerInvariant();
+                        string avatarFileName = string.Format("{0}_{1}{2}", user.NickName, user.Id, extension);
+                        
+                        var tempfilePath = Server.MapPath(string.Format("~/Temp/{0}{1}",Guid.NewGuid().ToString(),extension));
+                        if (null != FileUploadHelper.ImageResizeAndLocation(tempfilePath, "~/Avatars", avatarFileName, 300, _24ayar.ImageProcess.ResizeProportionType.PROPORTION_W, false, true))
+                        {
+                            
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Avatar dosyanın dosya beklenen biçimde değil. (jpg,png,bmp,gif) olmalıdır");
+                        }
+                    }
+                    user.NickName = model.Nickname;
+                    UserManager.Update(user);
+                    return null;
+                }else
+                return View(model);
+            }
+            else
+                return View(model);
+        }
         //
         // GET: /Account/Login
         [AllowAnonymous]

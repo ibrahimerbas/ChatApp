@@ -34,7 +34,7 @@ namespace ChatApp.Web
 
                         OnValidateIdentity = SecurityStampValidator
                         .OnValidateIdentity<ApplicationUserManager, ApplicationUser, int>(
-                            validateInterval: TimeSpan.FromMinutes(30),
+                            validateInterval: TimeSpan.FromMinutes(300),
                             regenerateIdentityCallback: (manager, user) =>
                                 user.GenerateUserIdentityAsync(manager),
                             getUserIdCallback: (id) => (id.GetUserId<int>()))

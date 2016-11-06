@@ -12,25 +12,79 @@ using Microsoft.Owin.Security;
 using ChatApp.Web.Models;
 using ChatApp.Data.Repository;
 using ChatApp.Data.Surrogates;
+using Moq;
+using System.Security.Principal;
+using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNet.SignalR.Configuration;
+using System.Threading;
 
 namespace ChatApp.Web.Helpers
 {
     public class ChatHub : Hub
     {
+        
+        //public Mock<IChatRepository> MockChatRepository { get; private set; }
+        public IConfigurationManager _config;
+        public ChatHub(string username, string password)
+
+        {
+
+            var identity = new GenericIdentity("24ayar@mail.com");
+            identity.AddClaim(new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, "2",System.Security.Claims.ClaimValueTypes.Integer));
+            identity.AddClaim(new System.Security.Claims.Claim("NickName", "ibrahim", System.Security.Claims.ClaimValueTypes.Integer));
+            //Thread.CurrentPrincipal = new GenericPrincipal(identity, null);
+            //ApplicationSignInManager c = new ApplicationSignInManager("sa", HttpContext.GetOwinContext().Authentication)
+            //SignInManager.PasswordSignIn(username, password, true, true);
+            const string connectionId = "1234";
+            const string hubName = "ChatHub";
+            var resolver = new DefaultDependencyResolver();
+            _config = resolver.Resolve<IConfigurationManager>();
+
+            var mockConnection = new Mock<IConnection>();
+            var mockUser = new Mock<IPrincipal>();
+            //var mockCookies = new Mock<IRequestCookieCollection>();
+            var mockHubPipelineInvoker = new Mock<IHubPipelineInvoker>();
+            //IHubPipelineInvoker _pipelineInvoker = resolver.Resolve<IHubPipelineInvoker>();
+
+            var mockRequest = new Mock<IRequest>();
+            mockRequest.Setup(r => r.User).Returns(new GenericPrincipal(identity, null));
+            //mockRequest.Setup(r => r.Cookies).Returns(mockCookies.Object);
+
+            StateChangeTracker tracker = new StateChangeTracker();
+
+            //Clients = new HubConnectionContext(_pipelineInvoker, mockConnection.Object, hubName, connectionId, tracker);
+            Clients = new HubConnectionContext(mockHubPipelineInvoker.Object, mockConnection.Object, hubName, connectionId, tracker);
+            Context = new HubCallerContext(mockRequest.Object, connectionId);
+            var x = Clients.Caller;
+        }
+
         public static readonly ConcurrentDictionary<int, SignalRUser> Users
         = new ConcurrentDictionary<int, SignalRUser>();
-         ApplicationUserManager _userManager;
-        private ApplicationUserManager UserManager
+         static ApplicationUserManager  _userManager;
+        //private static ApplicationSignInManager _signInManager;
+
+        private static ApplicationUserManager UserManager
         {
             get
             {
-                return _userManager ?? new System.Web.HttpContextWrapper(System.Web.HttpContext.Current).GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return new ApplicationUserManager(new ApplicationUserStore(new ApplicationDbContext()));
             }
             set
             {
                 _userManager = value;
             }
         }
+        //public static ApplicationSignInManager SignInManager
+        //{
+        //    get
+        //    {
+        //        return _signInManager ?? new System.Web.HttpContextWrapper(System.Web.HttpContext.Current).GetOwinContext().Get<ApplicationSignInManager>();
+        //    }
+        //    private set
+        //    {
+        //        _signInManager = value;
+        //    }
+        //}
 
         public override System.Threading.Tasks.Task OnConnected()
         {
@@ -125,13 +179,13 @@ namespace ChatApp.Web.Helpers
             }
             catch
             {
-                
                 return null;
             }
         }
 
         public List<OutgoingMessageViewModel> ScrollMoveMessages(Guid messageID, bool Up)
         {
+            
             int totalCount = 0;
             ChatMessageRepository cRepo = new ChatMessageRepository();
             var message = cRepo.Get(messageID);
