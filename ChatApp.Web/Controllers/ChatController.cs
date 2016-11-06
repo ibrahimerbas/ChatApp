@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace ChatApp.Web.Controllers
 {
+    [Authorize()]
     public class ChatController : HubController
     {
         const string ChatFileDir = "~/ChatFiles";

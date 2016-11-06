@@ -1,8 +1,11 @@
-﻿
+﻿@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Chat Room";
 }
 @section scripts{
+<script type="text/javascript">
+    var myUserID = @(User.Identity.GetUserId<int>());
+</script>
 @Scripts.Render("~/bundles/signalr")
 @Scripts.Render("~/bundles/angular-timeago-master-core")
 @Scripts.Render("~/bundles/angular-timeago-master")
